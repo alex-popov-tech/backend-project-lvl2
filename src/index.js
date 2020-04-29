@@ -33,10 +33,10 @@ export const genDiff = (firstObject, secondObject) => {
   const untouched = difference(union(firstKeys, secondKeys), union(added, updated, removed));
 
   return {
-    added: added.map((key) => ({ key, value: secondObject[key] })),
-    removed: removed.map((key) => ({ key, value: firstObject[key] })),
-    updated: updated.map((key) => ({ key, from: firstObject[key], to: secondObject[key] })),
-    untouched: untouched.map((key) => ({ key, value: firstObject[key] })),
+    added: added.map((key) => ({ [key]: secondObject[key] })),
+    removed: removed.map((key) => ({ [key]: firstObject[key] })),
+    updated: updated.map((key) => ({ [key]: { from: firstObject[key], to: secondObject[key] } })),
+    untouched: untouched.map((key) => ({ [key]: firstObject[key] })),
   };
 };
 
