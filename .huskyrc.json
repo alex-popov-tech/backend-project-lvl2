@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-push": "make lint && make test"
+    "pre-push": "make lint && make test && make publish"
   }
 }

@@ -19,11 +19,11 @@ export default (firstObject, secondObject) => {
   );
 
   return {
-    added: addedKeys.map((key) => ({ [key]: secondObject[key] })),
-    removed: removedKeys.map((key) => ({ [key]: firstObject[key] })),
+    added: addedKeys.map((key) => ({ key, value: secondObject[key] })),
+    removed: removedKeys.map((key) => ({ key, value: firstObject[key] })),
     updated: updatedKeys.map(
-      (key) => ({ [key]: { from: firstObject[key], to: secondObject[key] } }),
+      (key) => ({ key, value: { from: firstObject[key], to: secondObject[key] } }),
     ),
-    untouched: untouchedKeys.map((key) => ({ [key]: firstObject[key] })),
+    untouched: untouchedKeys.map((key) => ({ key, value: firstObject[key] })),
   };
 };
