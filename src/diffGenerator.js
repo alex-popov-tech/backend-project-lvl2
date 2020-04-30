@@ -6,24 +6,27 @@ const {
   keys,
 } = _;
 
-export default (firstObject, secondObject) => {
+const genDiff = (firstObject, secondObject) => {
   const firstObjectKeys = keys(firstObject);
   const secondObjectKeys = keys(secondObject);
+
   const addedKeys = secondObjectKeys.filter((skey) => !firstObjectKeys.includes(skey));
-  const updatedKeys = secondObjectKeys.filter(
-    (skey) => firstObject[skey] !== undefined && firstObject[skey] !== secondObject[skey],
-  );
+  const updatedKeys = secondObjectKeys.filter((skey) => firstObject[skey] !== undefined && firstObject[skey] !== secondObject[skey]);
   const removedKeys = firstObjectKeys.filter((fkey) => !secondObjectKeys.includes(fkey));
-  const untouchedKeys = difference(
-    union(firstObjectKeys, secondObjectKeys), union(addedKeys, updatedKeys, removedKeys),
-  );
+  const untouchedKeys = difference(union(firstObjectKeys, secondObjectKeys), union(addedKeys, updatedKeys, removedKeys));
+
+  const added = addedKeys.map((key) => ({ key, value: secondObject[key] }));
+  const removed = removedKeys.map((key) => ({ key, value: firstObject[key] }));
+  const untouched = untouchedKeys.map((key) => ({ key, value: firstObject[key] }));
+  const updated = updatedKeys.map((key) => (typeof firstObject[key] !== 'object' ? ({ key, from: firstObject[key], to: secondObject[key] }) : ({ key, value: genDiff(firstObject[key], secondObject[key]) })));
+  // const updated = updatedKeys.map((key) => (typeof firstObject[key] !== 'object' ? ({ key, from: firstObject[key], to: secondObject[key] }) : ({ key, value: null })));
 
   return {
-    added: addedKeys.map((key) => ({ key, value: secondObject[key] })),
-    removed: removedKeys.map((key) => ({ key, value: firstObject[key] })),
-    updated: updatedKeys.map(
-      (key) => ({ key, value: { from: firstObject[key], to: secondObject[key] } }),
-    ),
-    untouched: untouchedKeys.map((key) => ({ key, value: firstObject[key] })),
+    added,
+    removed,
+    untouched,
+    updated,
   };
 };
+
+export default genDiff;

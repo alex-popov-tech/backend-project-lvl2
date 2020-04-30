@@ -1,41 +1,46 @@
 import genDiff from '../src/diffGenerator.js';
 
-describe('Diff Generator', () => {
+const before = {
+  a: 1, b: true, c: 'three', e: {},
+  gr: {
+    a: 1, b: true, c: 'three', e: {},
+    dgr: {
+      a: 1, b: true, c: 'three', e: {},
+    },
+  },
+};
 
-  it('should return correct diff when new keys', () => {
-    expect(genDiff({}, { a: 1 })).toStrictEqual({
-      added: [{ a: 1 }],
-      removed: [],
-      updated: [],
-      untouched: [],
-    });
+const after = {
+  b: false, c: 'three', d: 'new', f: {},
+  gr: {
+    b: false, c: 'three', d: 'new', f: {},
+    dgr: {
+      b: false, c: 'three', d: 'new', f: {},
+    },
+  },
+};
+
+test('should return correct diff object when comparing deep objects', () => {
+  expect(genDiff(before, after)).toEqual({
+    added: [{ key: 'd', value: 'new' }, { key: 'f', value: {} }],
+    removed: [{ key: 'a', value: 1 }, { key: 'e', value: {} }],
+    untouched: [{ key: 'c', value: 'three' }],
+    updated: [{ key: 'b', from: true, to: false }, {
+      key: 'gr',
+      value: {
+        added: [{ key: 'd', value: 'new' }, { key: 'f', value: {} }],
+        removed: [{ key: 'a', value: 1 }, { key: 'e', value: {} }],
+        untouched: [{ key: 'c', value: 'three' }],
+        updated: [{ key: 'b', from: true, to: false }, {
+          key: 'dgr',
+          value: {
+            added: [{ key: 'd', value: 'new' }, { key: 'f', value: {} }],
+            removed: [{ key: 'a', value: 1 }, { key: 'e', value: {} }],
+            untouched: [{ key: 'c', value: 'three' }],
+            updated: [{ key: 'b', from: true, to: false }],
+          },
+        }],
+      },
+    }],
   });
-
-  it('should return correct diff when updated keys', () => {
-    expect(genDiff({ a: 1 }, { a: 2 })).toStrictEqual({
-      added: [],
-      removed: [],
-      updated: [{ a: { from: 1, to: 2 } }],
-      untouched: [],
-    });
-  });
-
-  it('should return correct diff when removed keys', () => {
-    expect(genDiff({ a: 1 }, { })).toStrictEqual({
-      added: [],
-      removed: [{ a: 1 }],
-      updated: [],
-      untouched: [],
-    });
-  });
-
-  it('should return correct diff when untouched keys', () => {
-    expect(genDiff({ a: 1 }, { a: 1 })).toStrictEqual({
-      added: [],
-      removed: [],
-      updated: [],
-      untouched: [{ a: 1 }],
-    });
-  });
-
 });

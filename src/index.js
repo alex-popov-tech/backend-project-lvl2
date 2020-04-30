@@ -1,18 +1,14 @@
 import genDiff from './diffGenerator.js';
 import parse from './parser.js';
+import render from './render.js';
 
-const printDiffs = (diff) => {
-  const results = [
-    ...diff.added.map((it) => `+ ${it.key} ${it.value}`),
-    ...diff.updated.map((it) => `+ ${it.key} ${it.value.to}\n- ${it.key} ${it.value.from}`),
-    ...diff.removed.map((it) => `- ${it.key} ${it.value}`),
-    ...diff.untouched.map((it) => `  ${it.key} ${it.value}`),
-  ];
-  console.log(`{\n${results.join('\n')}\n}`);
+export const genDiffString = (firstFilePath, secondFilePath) => {
+  const [firstObject, secondObject] = [parse(firstFilePath), parse(secondFilePath)];
+  const diff = genDiff(firstObject, secondObject);
+  return render(diff);
 };
 
 export default (firstFilePath, secondFilePath) => {
-  const [firstObject, secondObject] = [parse(firstFilePath), parse(secondFilePath)];
-  const diff = genDiff(firstObject, secondObject);
-  printDiffs(diff);
+  const output = genDiffString(firstFilePath, secondFilePath);
+  console.log(output);
 };
