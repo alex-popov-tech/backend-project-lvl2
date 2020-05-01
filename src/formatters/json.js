@@ -1,8 +1,9 @@
-const stringify = (diffs) => {
+/* eslint-disable no-restricted-syntax */
+const transformDiffs = (diffs) => {
   const result = {};
   for (const { name, from, to, childs } of diffs) {
     if (childs) {
-      result[name] = stringify(diffs);
+      result[name] = transformDiffs(childs);
     } else if (from === undefined) {
       result[`+ ${name}`] = to;
     } else if (to === undefined) {
@@ -16,4 +17,7 @@ const stringify = (diffs) => {
   }
   return result;
 };
-export default (diffs) => JSON.stringify(stringify(diffs), null, '\t').replace(/[",]/g, '');
+
+const INDENT = '\t';
+
+export default (diffs) => JSON.stringify(transformDiffs(diffs), null, INDENT);
