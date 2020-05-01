@@ -1,12 +1,19 @@
-const stringify = (diffObject, space = '\n\t', name = '') => {
-  const result = [
-    ...diffObject.added.map(({ key, value }) => ({ [`+ ${key}`]: value })),
-    ...diffObject.updated.filter(({ value }) => !value).map(({ key, to }) => ({ [`+ ${key}`]: to })),
-    ...diffObject.updated.filter(({ value }) => !value).map(({ key, from }) => ({ [`- ${key}`]: from })),
-    // ...diffObject.updated.filter((it) => it.value).map((it) => stringify(it.value, `${space}\t`, `  ${it.key}: `)),
-    ...diffObject.removed.map(({ key, value }) => ({ [`- ${key}`]: value })),
-    ...diffObject.untouched.map(({ key, value }) => ({ [`  ${key}`]: value })),
-  ].reduce((acc, it) => ({ ...acc, ...it }), {});
-  return JSON.stringify(result, null, '\t').replace(/[",]/g, '');
+const stringify = (diffs) => {
+  const result = {};
+  for (const { name, from, to, childs } of diffs) {
+    if (childs) {
+      result[name] = stringify(diffs);
+    } else if (from === undefined) {
+      result[`+ ${name}`] = to;
+    } else if (to === undefined) {
+      result[`- ${name}`] = from;
+    } else if (to === from) {
+      result[`  ${name}`] = from;
+    } else {
+      result[`+ ${name}`] = to;
+      result[`- ${name}`] = from;
+    }
+  }
+  return result;
 };
-export default stringify;
+export default (diffs) => JSON.stringify(stringify(diffs), null, '\t').replace(/[",]/g, '');
