@@ -13,24 +13,6 @@ jobs:
       - run: npm ci
       - run: make lint
       - run: make test-coverage
-      - uses: actions/upload-artifact@v1
-        with:
-          name: coverage
-          path: coverage
-  update_coverage:
-    needs: [ verify ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/upload-artifact@v1
-        with:
-          name: coverage
-          path: coverage
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
-        with:
-          node-version: '13.x'
-      - run: npm install -g yarn
-      - run: yarn install
       - uses: paambaati/codeclimate-action@2.2.4
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
