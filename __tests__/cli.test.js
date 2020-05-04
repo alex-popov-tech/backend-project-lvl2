@@ -7,12 +7,14 @@ import { genDiffString } from '../src/index.js';
     from: { path: 'fixtures/before.json', type: 'JSON' },
     to: { path: 'fixtures/after.json', type: 'JSON' },
     output: readFileSync('fixtures/json_output').toString().trim(),
-  }, {
+  },
+  {
     format: 'pretty',
     from: { path: 'fixtures/before.json', type: 'JSON' },
     to: { path: 'fixtures/after.yml', type: 'YAML' },
     output: readFileSync('fixtures/pretty_output').toString().trim(),
-  }, {
+  },
+  {
     format: 'plain',
     from: { path: 'fixtures/before.yml', type: 'YAML' },
     to: { path: 'fixtures/after.ini', type: 'INI' },
