@@ -13,7 +13,7 @@ jobs:
       - run: npm ci
       - run: make lint
       - run: make test-coverage
-      - uses: paambaati/codeclimate-action@2.2.4
+      - uses: paambaati/codeclimate-action@2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
         with:
