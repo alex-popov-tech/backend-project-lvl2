@@ -5,8 +5,6 @@ publish:
 lint:
 	npx eslint src
 test:
-	npx jest
-test-coverage:
-	npx jest --coverage
+	npm test
 test-watch:
 	npx jest --watch
