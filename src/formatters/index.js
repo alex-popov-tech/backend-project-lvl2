@@ -1,5 +1,6 @@
-import renderAsJson from './json';
-import renderAsPlain from './plain';
+import renderAsJson from './json.js';
+import renderAsPlain from './plain.js';
+import renderAsPretty from './pretty.js';
 
 export default (diffs, format) => {
   switch (format.toLowerCase()) {
@@ -10,7 +11,7 @@ export default (diffs, format) => {
       return renderAsPlain(diffs);
     }
     default: {
-      throw new Error(`Format "${format}" is not supported.`);
+      return renderAsPretty(diffs);
     }
   }
 };

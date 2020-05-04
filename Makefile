@@ -6,3 +6,5 @@ lint:
 	npx eslint src
 test:
 	npx jest
+test-watch:
+	npx jest --watch

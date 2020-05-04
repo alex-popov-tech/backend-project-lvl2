@@ -1,23 +1,2 @@
-/* eslint-disable no-restricted-syntax */
-const transformDiffs = (diffs) => {
-  const result = {};
-  for (const { name, from, to, childs } of diffs) {
-    if (childs) {
-      result[name] = transformDiffs(childs);
-    } else if (from === undefined) {
-      result[`+ ${name}`] = to;
-    } else if (to === undefined) {
-      result[`- ${name}`] = from;
-    } else if (to === from) {
-      result[`  ${name}`] = from;
-    } else {
-      result[`+ ${name}`] = to;
-      result[`- ${name}`] = from;
-    }
-  }
-  return result;
-};
-
-const INDENT = '\t';
-
-export default (diffs) => JSON.stringify(transformDiffs(diffs), null, INDENT);
+const INDENTION_LEVEL = ' '.repeat(2);
+export default (diffs) => JSON.stringify(diffs, null, INDENTION_LEVEL);

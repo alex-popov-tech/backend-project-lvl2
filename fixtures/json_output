@@ -1,0 +1,85 @@
+[
+  {
+    "name": "common",
+    "childs": [
+      {
+        "name": "follow",
+        "to": false
+      },
+      {
+        "name": "setting1",
+        "from": "Value 1",
+        "to": "Value 1"
+      },
+      {
+        "name": "setting2",
+        "from": 200
+      },
+      {
+        "name": "setting3",
+        "from": true,
+        "to": {
+          "key": "value"
+        }
+      },
+      {
+        "name": "setting4",
+        "to": "blah blah"
+      },
+      {
+        "name": "setting5",
+        "to": {
+          "key5": "value5"
+        }
+      },
+      {
+        "name": "setting6",
+        "childs": [
+          {
+            "name": "key",
+            "from": "value",
+            "to": "value"
+          },
+          {
+            "name": "ops",
+            "to": "vops"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "group1",
+    "childs": [
+      {
+        "name": "baz",
+        "from": "bas",
+        "to": "bars"
+      },
+      {
+        "name": "foo",
+        "from": "bar",
+        "to": "bar"
+      },
+      {
+        "name": "nest",
+        "from": {
+          "key": "value"
+        },
+        "to": "str"
+      }
+    ]
+  },
+  {
+    "name": "group2",
+    "from": {
+      "abc": 12345
+    }
+  },
+  {
+    "name": "group3",
+    "to": {
+      "fee": 100500
+    }
+  }
+]

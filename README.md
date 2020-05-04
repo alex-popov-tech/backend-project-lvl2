@@ -6,16 +6,29 @@
 
 # Demo
 
+## Diff in json format
+
 [![Demo](https://asciinema.org/a/OA1hsJX09PANxomEPLH7HHb2o.png)](https://asciinema.org/a/OA1hsJX09PANxomEPLH7HHb2o)
+
+## Diff in plain format
+
+[![Demo](https://asciinema.org/a/https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux.png)](https://asciinema.org/a/https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux)
+
 
 # Setup
 
 ```sh
-`make install`
+make install
 ```
 
 ## Run tests
 
 ```sh
-`make test`
+make test
+```
+
+## Run linter
+
+```sh
+make lint
 ```

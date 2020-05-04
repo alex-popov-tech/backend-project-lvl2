@@ -1,18 +1,20 @@
 import { readFileSync } from 'fs';
 import ini from 'ini';
-import _ from 'lodash';
 import yaml from 'js-yaml';
+import _ from 'lodash';
 import { extname, resolve } from 'path';
 
+const isNumberInsideString = (value) => typeof value === 'string' && !Number.isNaN(Number(value));
 
-const normalize = (object) => {
-  for (const [key, value] of Object.entries(object)) {
+const normalize = (obj) => {
+  Object.entries(obj).forEach(([key, value]) => {
     if (typeof value === 'object') {
       normalize(value);
-    } else if ( typeof value === 'string' && !Number.isNaN(Number(value))){
-      object[key] = Number(value);
+    } else if (isNumberInsideString(value)) {
+      // eslint-disable-next-line no-param-reassign
+      obj[key] = Number(value);
     }
-  }
+  });
 };
 
 const parseIni = (fileBuffer) => {
