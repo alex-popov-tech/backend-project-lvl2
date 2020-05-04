@@ -24,5 +24,9 @@ const transformDiffs = (diffs) => {
 
 const INDENT = ' '.repeat(2);
 
-export default (diffs) => JSON.stringify(transformDiffs(diffs), null, INDENT)
-  // .replace(/[",]/g, '');
+export default (diffs) => {
+  const result = transformDiffs(diffs);
+  const json = JSON.stringify(result, null, INDENT)
+    .replace(/[",]/g, '');
+  return json;
+};
