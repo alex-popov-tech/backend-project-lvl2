@@ -11,8 +11,8 @@ jobs:
         with:
           node-version: '13.x'
       - run: npm ci
-      - run: make lint
-      - run: make test-coverage
+      - run: npm run lint
+      - run: npm test
       - uses: paambaati/codeclimate-action@v2.6.0
         if: ${{ failure() || success() }}
         env:
