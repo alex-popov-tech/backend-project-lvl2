@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
-const generateDifferences = (beforeObject, afterObject) => _.union(
-  _.keys(beforeObject),
-  _.keys(afterObject),
-).sort()
-  .map((name) => {
-    const beforeValue = beforeObject[name];
-    const afterValue = afterObject[name];
+const generateDifferences = (before, after) => _.union(_.keys(before), _.keys(after))
+  .sort()
+  .map((key) => ({
+    name: key,
+    beforeValue: before[key],
+    afterValue: after[key],
+  })).map(({ name, beforeValue, afterValue }) => {
     if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
       return {
         name,
