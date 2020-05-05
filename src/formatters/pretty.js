@@ -1,32 +1,44 @@
-const transformDiffs = (diffs) => {
-  const result = {};
-  diffs.forEach(({
+const indention = (level) => '  '.repeat(level);
+
+const stringify = (name, entity, indentionLevel) => {
+  if (typeof entity !== 'object') {
+    return `${name}: ${entity}`;
+  }
+  const fields = Object.entries(entity)
+    .map(([key, value]) => `${indention(indentionLevel + 2)}  ${key}: ${value}`)
+    .join('\n');
+  return `${name}: {\n${fields}\n${indention(indentionLevel)}  }`
+};
+
+const transformDiffs = (diffs, indentionLevel) => {
+  const result = diffs.map(({
     name,
-    from,
-    to,
-    childs,
+    value,
+    type,
+    children,
   }) => {
-    if (childs) {
-      result[`  ${name}`] = transformDiffs(childs);
-    } else if (from === undefined) {
-      result[`+ ${name}`] = to;
-    } else if (to === undefined) {
-      result[`- ${name}`] = from;
-    } else if (to === from) {
-      result[`  ${name}`] = from;
-    } else {
-      result[`+ ${name}`] = to;
-      result[`- ${name}`] = from;
+    const indent = indention(indentionLevel);
+    switch (type) {
+      case 'added': {
+        return `${indent}+ ${stringify(name, value, indentionLevel)}`;
+      }
+      case 'removed': {
+        return `${indent}- ${stringify(name, value, indentionLevel)}`;
+      }
+      case 'changed': {
+        const before = `${indent}- ${stringify(name, value.before, indentionLevel)}`;
+        const after = `${indent}+ ${stringify(name, value.after, indentionLevel)}`;
+        return `${after}\n${before}`;
+      }
+      case 'parent': {
+        return `${indent}  ${name}: ${transformDiffs(children, indentionLevel + 2)}`;
+      }
+      default: {
+        return `${indent}  ${stringify(name, value, indentionLevel)}`;
+      }
     }
-  });
-  return result;
+  }).join('\n');
+  return `{\n${result}\n${indention(indentionLevel - 1)}}`;
 };
 
-const INDENT = ' '.repeat(2);
-
-export default (diffs) => {
-  const result = transformDiffs(diffs);
-  const json = JSON.stringify(result, null, INDENT)
-    .replace(/[",]/g, '');
-  return json;
-};
+export default (diffs) => transformDiffs(diffs, 1);

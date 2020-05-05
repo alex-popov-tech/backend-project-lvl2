@@ -1,48 +1,58 @@
 [
   {
     "name": "common",
-    "childs": [
+    "type": "parent",
+    "children": [
       {
         "name": "follow",
-        "to": false
+        "type": "added",
+        "value": false
       },
       {
         "name": "setting1",
-        "from": "Value 1",
-        "to": "Value 1"
+        "type": "unchanged",
+        "value": "Value 1"
       },
       {
         "name": "setting2",
-        "from": 200
+        "type": "removed",
+        "value": 200
       },
       {
         "name": "setting3",
-        "from": true,
-        "to": {
-          "key": "value"
+        "type": "changed",
+        "value": {
+          "before": true,
+          "after": {
+            "key": "value"
+          }
         }
       },
       {
         "name": "setting4",
-        "to": "blah blah"
+        "type": "added",
+        "value": "blah blah"
       },
       {
         "name": "setting5",
-        "to": {
+        "type": "added",
+        "value": {
           "key5": "value5"
         }
       },
       {
         "name": "setting6",
-        "childs": [
+        "type": "parent",
+        "children": [
           {
             "name": "key",
-            "from": "value",
-            "to": "value"
+            "type": "unchanged",
+            "value": "value"
           },
           {
             "name": "ops",
-            "to": "vops"
+            "type": "added",
+            "value": "vops"
           }
         ]
       }
@@ -50,35 +60,44 @@
   },
   {
     "name": "group1",
-    "childs": [
+    "type": "parent",
+    "children": [
       {
         "name": "baz",
-        "from": "bas",
-        "to": "bars"
+        "type": "changed",
+        "value": {
+          "before": "bas",
+          "after": "bars"
+        }
       },
       {
         "name": "foo",
-        "from": "bar",
-        "to": "bar"
+        "type": "unchanged",
+        "value": "bar"
       },
       {
         "name": "nest",
-        "from": {
-          "key": "value"
-        },
-        "to": "str"
+        "type": "changed",
+        "value": {
+          "before": {
+            "key": "value"
+          },
+          "after": "str"
+        }
       }
     ]
   },
   {
     "name": "group2",
-    "from": {
+    "type": "removed",
+    "value": {
       "abc": 12345
     }
   },
   {
     "name": "group3",
-    "to": {
+    "type": "added",
+    "value": {
       "fee": 100500
     }
   }

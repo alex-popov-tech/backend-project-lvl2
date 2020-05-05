@@ -10,6 +10,5 @@ export const genDiffString = (firstFilePath, secondFilePath, format) => {
 };
 
 export default (firstFilePath, secondFilePath, format) => {
-  const output = genDiffString(firstFilePath, secondFilePath, format);
-  console.log(output);
+  console.log(genDiffString(firstFilePath, secondFilePath, format));
 };

@@ -1,95 +1,22 @@
 import genDiff from '../src/diffGenerator.js';
 
 
-test('should return correct diff object when comparing flat objects', () => {
-  const before = {
-    a: 1,
-    b: true,
-    c: 'three',
-    e: {},
-  };
-  const after = {
-    b: false,
-    c: 'three',
-    d: 'new',
-    f: {},
-  };
-  expect(genDiff(before, after)).toEqual([
-    {
-      name: 'a',
-      from: 1,
-      to: undefined,
-    }, {
-      name: 'b',
-      from: true,
-      to: false,
-    }, {
-      name: 'c',
-      from: 'three',
-      to: 'three',
-    }, {
-      name: 'd',
-      from: undefined,
-      to: 'new',
-    }, {
-      name: 'e',
-      from: {},
-      to: undefined,
-    }, {
-      name: 'f',
-      from: undefined,
-      to: {},
-    },
-  ]);
-});
-
-
 test('should return correct diff object when comparing deep objects', () => {
   const before = {
-    key: {
-      a: 1,
-      b: true,
-      c: 'three',
-      e: {},
-    },
+    a: 1, b: true, c: 'three', deep: { a: 1, b: true, c: 'three' }
   };
   const after = {
-    key: {
-      b: false,
-      c: 'three',
-      d: 'new',
-      f: {},
-    },
+    b: false, c: 'three', deep: { b: false, c: 'three' }
   };
   expect(genDiff(before, after)).toEqual([
+    { name: 'a', type: 'removed', value: 1, },
+    { name: 'b', type: 'changed', value: { before: true, after: false, } },
+    { name: 'c', type: 'unchanged', value: 'three', },
     {
-      name: 'key',
-      childs: [
-        {
-          name: 'a',
-          from: 1,
-          to: undefined,
-        }, {
-          name: 'b',
-          from: true,
-          to: false,
-        }, {
-          name: 'c',
-          from: 'three',
-          to: 'three',
-        }, {
-          name: 'd',
-          from: undefined,
-          to: 'new',
-        }, {
-          name: 'e',
-          from: {},
-          to: undefined,
-        }, {
-          name: 'f',
-          from: undefined,
-          to: {},
-        },
+      name: 'deep', type: 'parent', children: [
+        { name: 'a', type: 'removed', value: 1, },
+        { name: 'b', type: 'changed', value: { before: true, after: false, } },
+        { name: 'c', type: 'unchanged', value: 'three', },
       ],
     },
   ]);

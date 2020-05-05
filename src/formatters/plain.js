@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const toString = (entity) => {
   switch (typeof entity) {
     case 'object': {
@@ -12,25 +14,27 @@ const toString = (entity) => {
   }
 };
 
-const stringifyDiffs = (diffs, path) => {
-  const result = [];
-  diffs.forEach(({
-    name,
-    from,
-    to,
-    childs,
-  }) => {
-    if (childs) {
-      result.push(stringifyDiffs(childs, `${path}${name}.`));
-    } else if (from === undefined) {
-      result.push(`Property "${path}${name}" was added with value ${toString(to)}`);
-    } else if (to === undefined) {
-      result.push(`Property "${path}${name}" was deleted`);
-    } else if (to !== from) {
-      result.push(`Property "${path}${name}" was changed from ${toString(from)} to ${toString(to)}`);
-    }
-  });
-  return result.join('\n');
-};
+const stringifyDiffs = (diffs, path) => diffs.map(({
+  name,
+  value,
+  type,
+  children,
+}) => {
+  if ('parent' === type) {
+    return stringifyDiffs(children, `${path}${name}.`);
+  }
+  if ('added' === type) {
+    return `Property "${path}${name}" was added with value ${toString(value)}`;
+  }
+  if ('removed' === type) {
+    return `Property "${path}${name}" was deleted`;
+  }
+  if ('changed' === type) {
+    return `Property "${path}${name}" was changed from ${toString(value.before)} to ${toString(value.after)}`;
+  }
+  return null;
+})
+  .filter(_.identity)
+  .join('\n');
 
 export default (diff) => stringifyDiffs(diff, '');

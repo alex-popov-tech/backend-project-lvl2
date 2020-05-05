@@ -1,27 +1,47 @@
-/* eslint-disable no-restricted-syntax */
 import _ from 'lodash';
 
 
-const genDiff = (firstObject, secondObject) => {
-  const keys = _.union(_.keys(firstObject), _.keys(secondObject)).sort();
-  const result = [];
-  for (const key of keys) {
-    const from = firstObject[key];
-    const to = secondObject[key];
-    if (typeof from === 'object' && typeof to === 'object') {
-      result.push({
+const genDiff = (firstObject, secondObject) => _.union(_.keys(firstObject), _.keys(secondObject))
+  .sort()
+  .map((key) => {
+    const before = firstObject[key];
+    const after = secondObject[key];
+    if (typeof before === 'object' && typeof after === 'object') {
+      return {
         name: key,
-        childs: genDiff(firstObject[key], secondObject[key]),
-      });
-    } else {
-      result.push({
-        name: key,
-        from,
-        to,
-      });
+        type: 'parent',
+        children: genDiff(firstObject[key], secondObject[key]),
+      };
     }
-  }
-  return result;
-};
+    if (before === after) {
+      return {
+        name: key,
+        type: 'unchanged',
+        value: after,
+      };
+    }
+    if (before === undefined) {
+      return {
+        name: key,
+        type: 'added',
+        value: after,
+      };
+    }
+    if (after === undefined) {
+      return {
+        name: key,
+        type: 'removed',
+        value: before,
+      };
+    }
+    return {
+      name: key,
+      type: 'changed',
+      value: {
+        before,
+        after,
+      },
+    };
+  });
 
 export default genDiff;
