@@ -7,7 +7,7 @@ const stringify = (name, entity, indentionLevel) => {
   const fields = Object.entries(entity)
     .map(([key, value]) => `${indention(indentionLevel + 2)}  ${key}: ${value}`)
     .join('\n');
-  return `${name}: {\n${fields}\n${indention(indentionLevel)}  }`
+  return `${name}: {\n${fields}\n${indention(indentionLevel)}  }`;
 };
 
 const transformDiffs = (diffs, indentionLevel) => {

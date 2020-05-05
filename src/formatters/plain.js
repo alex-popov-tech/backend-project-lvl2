@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const toString = (entity) => {
+const stringify = (entity) => {
   switch (typeof entity) {
     case 'object': {
       return '[complex value]';
@@ -20,19 +20,23 @@ const stringifyDiffs = (diffs, path) => diffs.map(({
   type,
   children,
 }) => {
-  if ('parent' === type) {
-    return stringifyDiffs(children, `${path}${name}.`);
+  switch (type) {
+    case 'parent': {
+      return stringifyDiffs(children, `${path}${name}.`);
+    }
+    case 'added': {
+      return `Property "${path}${name}" was added with value ${stringify(value)}`;
+    }
+    case 'removed': {
+      return `Property "${path}${name}" was deleted`;
+    }
+    case 'changed': {
+      return `Property "${path}${name}" was changed from ${stringify(value.before)} to ${stringify(value.after)}`;
+    }
+    default: {
+      return null;
+    }
   }
-  if ('added' === type) {
-    return `Property "${path}${name}" was added with value ${toString(value)}`;
-  }
-  if ('removed' === type) {
-    return `Property "${path}${name}" was deleted`;
-  }
-  if ('changed' === type) {
-    return `Property "${path}${name}" was changed from ${toString(value.before)} to ${toString(value.after)}`;
-  }
-  return null;
 })
   .filter(_.identity)
   .join('\n');
