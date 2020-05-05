@@ -6,13 +6,17 @@
 
 # Demo
 
+## Diff in pretty format (default)
+
+[![Demo](https://asciinema.org/a/coHYa5ELM1pYJBT9EzPvZ0XJ4.png)](https://asciinema.org/a/coHYa5ELM1pYJBT9EzPvZ0XJ4)
+
 ## Diff in json format
 
 [![Demo](https://asciinema.org/a/OA1hsJX09PANxomEPLH7HHb2o.png)](https://asciinema.org/a/OA1hsJX09PANxomEPLH7HHb2o)
 
 ## Diff in plain format
 
-[![Demo](https://asciinema.org/a/https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux.png)](https://asciinema.org/a/https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux)
+[![Demo](https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux.png)](https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux)
 
 
 # Setup
