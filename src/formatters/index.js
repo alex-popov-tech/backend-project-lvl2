@@ -1,17 +1,17 @@
-import renderAsJson from './json.js';
-import renderAsPlain from './plain.js';
-import renderAsPretty from './pretty.js';
+import formatAsJson from './json.js';
+import formatAsPlain from './plain.js';
+import formatAsPretty from './pretty.js';
 
 export default (diffs, format) => {
   switch (format.toLowerCase()) {
     case 'json': {
-      return renderAsJson(diffs);
+      return formatAsJson(diffs);
     }
     case 'plain': {
-      return renderAsPlain(diffs);
+      return formatAsPlain(diffs);
     }
     default: {
-      return renderAsPretty(diffs);
+      return formatAsPretty(diffs);
     }
   }
 };

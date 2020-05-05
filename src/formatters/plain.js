@@ -14,7 +14,7 @@ const stringify = (entity) => {
   }
 };
 
-const stringifyDiffs = (diffs, path) => diffs.map(({
+const format = (differences, path = '') => differences.map(({
   name,
   value,
   type,
@@ -22,7 +22,7 @@ const stringifyDiffs = (diffs, path) => diffs.map(({
 }) => {
   switch (type) {
     case 'parent': {
-      return stringifyDiffs(children, `${path}${name}.`);
+      return format(children, `${path}${name}.`);
     }
     case 'added': {
       return `Property "${path}${name}" was added with value ${stringify(value)}`;
@@ -37,8 +37,7 @@ const stringifyDiffs = (diffs, path) => diffs.map(({
       return null;
     }
   }
-})
-  .filter(_.identity)
+}).filter(_.identity)
   .join('\n');
 
-export default (diff) => stringifyDiffs(diff, '');
+export default format;

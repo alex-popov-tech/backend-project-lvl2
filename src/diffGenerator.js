@@ -1,47 +1,48 @@
 import _ from 'lodash';
 
-
-const genDiff = (firstObject, secondObject) => _.union(_.keys(firstObject), _.keys(secondObject))
-  .sort()
-  .map((key) => {
-    const before = firstObject[key];
-    const after = secondObject[key];
-    if (typeof before === 'object' && typeof after === 'object') {
+const generateDifferences = (beforeObject, afterObject) => _.union(
+  _.keys(beforeObject),
+  _.keys(afterObject),
+).sort()
+  .map((name) => {
+    const beforeValue = beforeObject[name];
+    const afterValue = afterObject[name];
+    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
       return {
-        name: key,
+        name,
         type: 'parent',
-        children: genDiff(firstObject[key], secondObject[key]),
+        children: generateDifferences(beforeValue, afterValue),
       };
     }
-    if (before === after) {
+    if (beforeValue === afterValue) {
       return {
-        name: key,
+        name,
         type: 'unchanged',
-        value: after,
+        value: afterValue,
       };
     }
-    if (before === undefined) {
+    if (beforeValue === undefined) {
       return {
-        name: key,
+        name,
         type: 'added',
-        value: after,
+        value: afterValue,
       };
     }
-    if (after === undefined) {
+    if (afterValue === undefined) {
       return {
-        name: key,
+        name,
         type: 'removed',
-        value: before,
+        value: beforeValue,
       };
     }
     return {
-      name: key,
+      name,
       type: 'changed',
       value: {
-        before,
-        after,
+        before: beforeValue,
+        after: afterValue,
       },
     };
   });
 
-export default genDiff;
+export default generateDifferences;

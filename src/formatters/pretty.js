@@ -1,44 +1,44 @@
-const indention = (level) => '  '.repeat(level);
+const indentFor = (level) => '  '.repeat(level);
 
 const stringify = (name, entity, indentionLevel) => {
   if (typeof entity !== 'object') {
     return `${name}: ${entity}`;
   }
   const fields = Object.entries(entity)
-    .map(([key, value]) => `${indention(indentionLevel + 2)}  ${key}: ${value}`)
+    .map(([key, value]) => `${indentFor(indentionLevel + 2)}  ${key}: ${value}`)
     .join('\n');
-  return `${name}: {\n${fields}\n${indention(indentionLevel)}  }`;
+  return `${name}: {\n${fields}\n${indentFor(indentionLevel)}  }`;
 };
 
-const transformDiffs = (diffs, indentionLevel) => {
-  const result = diffs.map(({
+const format = (differences, indentionLevel = 1) => {
+  const result = differences.map(({
     name,
     value,
     type,
     children,
   }) => {
-    const indent = indention(indentionLevel);
+    const currentIndent = indentFor(indentionLevel);
     switch (type) {
       case 'added': {
-        return `${indent}+ ${stringify(name, value, indentionLevel)}`;
+        return `${currentIndent}+ ${stringify(name, value, indentionLevel)}`;
       }
       case 'removed': {
-        return `${indent}- ${stringify(name, value, indentionLevel)}`;
+        return `${currentIndent}- ${stringify(name, value, indentionLevel)}`;
       }
       case 'changed': {
-        const before = `${indent}- ${stringify(name, value.before, indentionLevel)}`;
-        const after = `${indent}+ ${stringify(name, value.after, indentionLevel)}`;
+        const before = `${currentIndent}- ${stringify(name, value.before, indentionLevel)}`;
+        const after = `${currentIndent}+ ${stringify(name, value.after, indentionLevel)}`;
         return `${after}\n${before}`;
       }
       case 'parent': {
-        return `${indent}  ${name}: ${transformDiffs(children, indentionLevel + 2)}`;
+        return `${currentIndent}  ${name}: ${format(children, indentionLevel + 2)}`;
       }
       default: {
-        return `${indent}  ${stringify(name, value, indentionLevel)}`;
+        return `${currentIndent}  ${stringify(name, value, indentionLevel)}`;
       }
     }
   }).join('\n');
-  return `{\n${result}\n${indention(indentionLevel - 1)}}`;
+  return `{\n${result}\n${indentFor(indentionLevel - 1)}}`;
 };
 
-export default (diffs) => transformDiffs(diffs, 1);
+export default format;

@@ -4,42 +4,42 @@ import yaml from 'js-yaml';
 import _ from 'lodash';
 import { extname, resolve } from 'path';
 
-const isNumberInsideString = (value) => typeof value === 'string' && !Number.isNaN(Number(value));
+const isNumberAsString = (value) => typeof value === 'string' && !Number.isNaN(Number(value));
 
-const normalize = (obj) => {
-  Object.entries(obj).forEach(([key, value]) => {
-    if (typeof value === 'object') {
-      normalize(value);
-    } else if (isNumberInsideString(value)) {
-      // eslint-disable-next-line no-param-reassign
-      obj[key] = Number(value);
-    }
-  });
+const parseIni = (buffer) => {
+  const objectWithNumbersAsStrings = ini.parse(buffer.toString());
+  const cloned = _.cloneDeep(objectWithNumbersAsStrings);
+  const normalize = (obj) => {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (typeof value === 'object') {
+        normalize(value);
+      } else if (isNumberAsString(value)) {
+        // eslint-disable-next-line no-param-reassign
+        obj[key] = Number(value);
+      }
+    });
+  };
+
+  normalize(cloned);
+  return cloned;
 };
 
-const parseIni = (fileBuffer) => {
-  const objectWithNumbersAsStrings = ini.parse(fileBuffer.toString());
-  const clonedObject = _.cloneDeep(objectWithNumbersAsStrings);
-  normalize(clonedObject);
-  return clonedObject;
-};
-
-export default (filePath) => {
-  const absoluteFilePath = resolve(process.cwd(), filePath);
-  const fileExtension = extname(absoluteFilePath);
-  const fileBuffer = readFileSync(absoluteFilePath);
-  switch (fileExtension) {
+export default (path) => {
+  const absolutePath = resolve(process.cwd(), path);
+  const extension = extname(absolutePath);
+  const buffer = readFileSync(absolutePath);
+  switch (extension) {
     case '.json': {
-      return JSON.parse(fileBuffer.toString());
+      return JSON.parse(buffer.toString());
     }
     case '.yml': {
-      return yaml.safeLoad(fileBuffer);
+      return yaml.safeLoad(buffer);
     }
     case '.ini': {
-      return parseIni(fileBuffer);
+      return parseIni(buffer);
     }
     default: {
-      throw new Error(`Invalid extension used - "${fileExtension}"`);
+      throw new Error(`Invalid extension used - "${extension}"`);
     }
   }
 };

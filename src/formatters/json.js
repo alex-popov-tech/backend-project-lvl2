@@ -1,2 +1,2 @@
-const INDENTION_LEVEL = ' '.repeat(2);
-export default (diffs) => JSON.stringify(diffs, null, INDENTION_LEVEL);
+const INDENT = '  ';
+export default (differences) => JSON.stringify(differences, null, INDENT);
