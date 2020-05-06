@@ -12,7 +12,7 @@ jobs:
           node-version: '13.x'
       - run: npm ci
       - run: npm run lint
-      - run: npm test:coverage
+      - run: npm run test:coverage
       - uses: paambaati/codeclimate-action@v2.6.0
         if: ${{ failure() || success() }}
         env:
