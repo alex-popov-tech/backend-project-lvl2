@@ -12,11 +12,10 @@ jobs:
           node-version: '13.x'
       - run: npm ci
       - run: npm run lint
-      - run: npm test
+      - run: npm test:coverage
       - uses: paambaati/codeclimate-action@v2.6.0
         if: ${{ failure() || success() }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
         with:
-          debug: true
           coverageCommand: true
