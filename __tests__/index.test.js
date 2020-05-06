@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { genDiffString } from '../src/index.js';
+import generateFormattedDifferences from '../src/index.js';
 
 [
   {
@@ -27,6 +27,6 @@ import { genDiffString } from '../src/index.js';
   expected,
 }) => {
   test(`genDiff provides correct differences in "${format}" between "${from.type}" and "${to.type}"`, () => {
-    expect(genDiffString(from.path, to.path, format)).toEqual(expected);
+    expect(generateFormattedDifferences(from.path, to.path, format)).toEqual(expected);
   });
 });

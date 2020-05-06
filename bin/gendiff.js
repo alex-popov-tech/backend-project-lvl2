@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 import commander from 'commander';
-import genDiff from '../src/index.js';
+import generateFormattedDifferences from '../src';
+import { version } from '../package.json';
 
 commander
   .description('Compares two configuration files and shows a difference.')
-  .version('1.0.0')
+  .version(version)
   .option('-f, --format <type>', 'output format', 'pretty')
   .arguments('<firstFilePath> <secondFilePath>')
   .action(
-    (firstFilePath, secondFilePath, options) => genDiff(
-      firstFilePath, secondFilePath, options.format,
-    ),
+    (firstFilePath, secondFilePath, options) => {
+      console.log(generateFormattedDifferences(firstFilePath, secondFilePath, options.format));
+    },
   )
   .parse(process.argv);
