@@ -1,17 +1,17 @@
-import formatAsJson from './json.js';
 import formatAsPlain from './plain.js';
 import formatAsPretty from './pretty.js';
 
-export default (diffs, format) => {
+export default (differences, format) => {
   switch (format.toLowerCase()) {
     case 'json': {
-      return formatAsJson(diffs);
+      const INDENT = '  ';
+      return JSON.stringify(differences, null, INDENT);
     }
     case 'plain': {
-      return formatAsPlain(diffs);
+      return formatAsPlain(differences);
     }
     default: {
-      return formatAsPretty(diffs);
+      return formatAsPretty(differences);
     }
   }
 };
