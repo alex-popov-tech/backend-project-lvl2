@@ -18,8 +18,15 @@
 
 [![Demo](https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux.png)](https://asciinema.org/a/XeI0AkjQ3MhtB1wtBMw0hINux)
 
+# Installation
 
-# Setup
+```sh
+npm install -g genDiff
+```
+
+# Development
+
+## Setup
 
 ```sh
 make install
