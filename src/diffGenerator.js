@@ -2,45 +2,41 @@ import _ from 'lodash';
 
 const generateDifferences = (before, after) => _.union(_.keys(before), _.keys(after))
   .sort()
-  .map((key) => ({
-    name: key,
-    beforeValue: before[key],
-    afterValue: after[key],
-  })).map(({ name, beforeValue, afterValue }) => {
-    if (typeof beforeValue === 'object' && typeof afterValue === 'object') {
+  .map((key) => {
+    if (!_.has(before, key)) {
       return {
-        name,
-        type: 'parent',
-        children: generateDifferences(beforeValue, afterValue),
-      };
-    }
-    if (beforeValue === afterValue) {
-      return {
-        name,
-        type: 'unchanged',
-        value: afterValue,
-      };
-    }
-    if (beforeValue === undefined) {
-      return {
-        name,
+        name: key,
         type: 'added',
-        value: afterValue,
+        value: after[key],
       };
     }
-    if (afterValue === undefined) {
+    if (!_.has(after, key)) {
       return {
-        name,
+        name: key,
         type: 'removed',
-        value: beforeValue,
+        value: before[key],
+      };
+    }
+    if (_.isObject(before[key]) && _.isObject(after[key])) {
+      return {
+        name: key,
+        type: 'nested',
+        children: generateDifferences(before[key], after[key]),
+      };
+    }
+    if (before[key] === after[key]) {
+      return {
+        name: key,
+        type: 'unchanged',
+        value: after[key],
       };
     }
     return {
-      name,
+      name: key,
       type: 'changed',
       value: {
-        before: beforeValue,
-        after: afterValue,
+        before: before[key],
+        after: after[key],
       },
     };
   });

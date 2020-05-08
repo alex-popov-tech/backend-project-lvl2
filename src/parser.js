@@ -1,33 +1,24 @@
-import { readFileSync } from 'fs';
 import ini from 'ini';
 import yaml from 'js-yaml';
 import _ from 'lodash';
-import { extname, resolve } from 'path';
-
-const isNumberAsString = (value) => typeof value === 'string' && !Number.isNaN(Number(value));
 
 const parseIni = (buffer) => {
   const objectWithNumbersAsStrings = ini.parse(buffer.toString());
-  const cloned = _.cloneDeep(objectWithNumbersAsStrings);
-  const normalize = (obj) => {
-    Object.entries(obj).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        normalize(value);
-      } else if (isNumberAsString(value)) {
-        // eslint-disable-next-line no-param-reassign
-        obj[key] = Number(value);
+  const getNormalizedClone = (obj) => _.keys(obj)
+    .reduce((acc, key) => {
+      const value = obj[key];
+      if (_.isPlainObject(value)) {
+        return { ...acc, [key]: getNormalizedClone(value) };
       }
-    });
-  };
-
-  normalize(cloned);
-  return cloned;
+      if (Number.isFinite(parseFloat(value))) {
+        return { ...acc, [key]: parseFloat(value) };
+      }
+      return { ...acc, [key]: value };
+    }, {});
+  return getNormalizedClone(objectWithNumbersAsStrings);
 };
 
-export default (path) => {
-  const absolutePath = resolve(process.cwd(), path);
-  const extension = extname(absolutePath);
-  const buffer = readFileSync(absolutePath);
+export default (buffer, extension) => {
   switch (extension) {
     case '.json': {
       return JSON.parse(buffer.toString());

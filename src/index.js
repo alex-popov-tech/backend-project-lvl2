@@ -1,10 +1,19 @@
-import genDiff from './diffGenerator.js';
+import { readFileSync } from 'fs';
+import { extname, resolve } from 'path';
+import generateDifferences from './diffGenerator.js';
 import parse from './parser.js';
-import stringifyDiffs from './formatters';
+import formatDifferences from './formatters/index.js';
 
+const readFile = (path) => {
+  const absolutePath = resolve(process.cwd(), path);
+  return readFileSync(absolutePath);
+};
 
 export default (firstFilePath, secondFilePath, format) => {
-  const [firstObject, secondObject] = [parse(firstFilePath), parse(secondFilePath)];
-  const diff = genDiff(firstObject, secondObject);
-  return stringifyDiffs(diff, format);
+  const firstBuffer = readFile(firstFilePath);
+  const secondBuffer = readFile(secondFilePath);
+  const firstObject = parse(firstBuffer, extname(firstFilePath));
+  const secondObject = parse(secondBuffer, extname(secondFilePath));
+  const diff = generateDifferences(firstObject, secondObject);
+  return formatDifferences(diff, format);
 };

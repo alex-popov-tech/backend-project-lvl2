@@ -10,8 +10,11 @@ export default (differences, format) => {
     case 'plain': {
       return formatAsPlain(differences);
     }
-    default: {
+    case 'pretty': {
       return formatAsPretty(differences);
+    }
+    default: {
+      throw new Error(`Format "${format}" is not supported`);
     }
   }
 };

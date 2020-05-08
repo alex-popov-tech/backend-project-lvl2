@@ -1,7 +1,9 @@
-plugins:
-  - eslint-plugin-import
+env:
+  jest: true
 extends:
   - eslint-config-airbnb-base
+plugins:
+  - eslint-plugin-import
 rules:
   no-console: 0
   import/extensions: 0

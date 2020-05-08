@@ -21,7 +21,7 @@ const format = (differences, path = '') => differences.map(({
   children,
 }) => {
   switch (type) {
-    case 'parent': {
+    case 'nested': {
       return format(children, `${path}${name}.`);
     }
     case 'added': {
