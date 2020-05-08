@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 import commander from 'commander';
-import generateFormattedDifferences from '../src';
-import { version } from '../package.json';
+import generateFormattedDifferences from '../src/index.js';
 
 commander
   .description('Compares two configuration files and shows a difference.')
-  .version(version)
+  .version('1.0.0')
   .option('-f, --format <type>', 'output format', 'pretty')
   .arguments('<firstFilePath> <secondFilePath>')
   .action(
