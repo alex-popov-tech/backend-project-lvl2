@@ -35,11 +35,15 @@ const format = (differences, deep = 1) => {
       case 'nested': {
         return `${currentDeep}  ${name}: ${format(children, deep + 2)}`;
       }
-      default: {
+      case 'unchanged': {
         return `${currentDeep}  ${name}: ${stringify(value, deep)}`;
       }
+      default: {
+        return null;
+      }
     }
-  }).join('\n');
+  }).filter(_.identity)
+    .join('\n');
   return `{\n${result}\n${indentFor(deep - 1)}}`;
 };
 
