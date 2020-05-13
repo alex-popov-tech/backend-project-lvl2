@@ -1,19 +1,21 @@
 import { readFileSync } from 'fs';
 import { extname, resolve } from 'path';
 import generateDifferences from './diffGenerator.js';
-import parse from './parser.js';
 import formatDifferences from './formatters/index.js';
+import parse from './parser.js';
 
 const readFile = (path) => {
   const absolutePath = resolve(process.cwd(), path);
-  return readFileSync(absolutePath);
+  const content = readFileSync(absolutePath).toString();
+  const format = extname(absolutePath).substr(1);
+  return { content, format };
 };
 
-export default (firstFilePath, secondFilePath, format) => {
-  const firstBuffer = readFile(firstFilePath);
-  const secondBuffer = readFile(secondFilePath);
-  const firstObject = parse(firstBuffer, extname(firstFilePath));
-  const secondObject = parse(secondBuffer, extname(secondFilePath));
-  const diff = generateDifferences(firstObject, secondObject);
-  return formatDifferences(diff, format);
+export default (firstFilePath, secondFilePath, formatName) => {
+  const firstFileData = readFile(firstFilePath);
+  const secondFileData = readFile(secondFilePath);
+  const firstObject = parse(firstFileData);
+  const secondObject = parse(secondFileData);
+  const differences = generateDifferences(firstObject, secondObject);
+  return formatDifferences(differences, formatName);
 };

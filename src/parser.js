@@ -2,8 +2,8 @@ import ini from 'ini';
 import yaml from 'js-yaml';
 import _ from 'lodash';
 
-const parseIni = (buffer) => {
-  const objectWithNumbersAsStrings = ini.parse(buffer.toString());
+const parseIni = (content) => {
+  const objectWithNumbersAsStrings = ini.parse(content);
   const getNormalizedClone = (obj) => _.keys(obj)
     .reduce((acc, key) => {
       const value = obj[key];
@@ -18,19 +18,19 @@ const parseIni = (buffer) => {
   return getNormalizedClone(objectWithNumbersAsStrings);
 };
 
-export default (buffer, extension) => {
-  switch (extension) {
-    case '.json': {
-      return JSON.parse(buffer.toString());
+export default ({ content, format }) => {
+  switch (format) {
+    case 'json': {
+      return JSON.parse(content);
     }
-    case '.yml': {
-      return yaml.safeLoad(buffer);
+    case 'yml': {
+      return yaml.safeLoad(content);
     }
-    case '.ini': {
-      return parseIni(buffer);
+    case 'ini': {
+      return parseIni(content);
     }
     default: {
-      throw new Error(`Invalid extension used - "${extension}"`);
+      throw new Error(`Invalid format used - "${format}"`);
     }
   }
 };
