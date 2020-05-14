@@ -33,8 +33,11 @@ const format = (differences, path = '') => differences.map(({
     case 'changed': {
       return `Property "${path}${name}" was changed from ${stringify(value.before)} to ${stringify(value.after)}`;
     }
-    default: {
+    case 'unchanged': {
       return null;
+    }
+    default: {
+      throw Error(`Unknown node type "${type}"`);
     }
   }
 }).filter(_.identity)

@@ -39,7 +39,7 @@ const format = (differences, deep = 1) => {
         return `${currentDeep}  ${name}: ${stringify(value, deep)}`;
       }
       default: {
-        return null;
+        throw Error(`Unknown node type "${type}"`);
       }
     }
   }).filter(_.identity)
