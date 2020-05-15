@@ -7,7 +7,7 @@
             key: value
         }
       - setting3: true
-      + setting4: blah blah
+      + setting4: привет
       + setting5: {
             key5: value5
         }
